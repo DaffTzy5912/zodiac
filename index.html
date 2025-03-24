@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cek Zodiak</title>
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #1e1e1e, #333);
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    max-width: 400px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+}
+
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 5px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+
+button {
+    background: #ff9800;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #e68900;
+}
+
+#result {
+    margin-top: 20px;
+    font-size: 18px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cek Zodiak Anda</h1>
+        <input type="text" id="year" placeholder="Masukkan Tahun (YYYY)">
+        <input type="text" id="month" placeholder="Masukkan Bulan (MM)">
+        <input type="text" id="day" placeholder="Masukkan Tanggal (DD)">
+        <button onclick="checkZodiac()">Cek Zodiak</button>
+        <div id="result"></div>
+    </div>
+    <script>
+    const zodiak = [
+    ["Capricorn", new Date(1970, 0, 1)],
+    ["Aquarius", new Date(1970, 0, 20)],
+    ["Pisces", new Date(1970, 1, 19)],
+    ["Aries", new Date(1970, 2, 21)],
+    ["Taurus", new Date(1970, 3, 21)],
+    ["Gemini", new Date(1970, 4, 21)],
+    ["Cancer", new Date(1970, 5, 22)],
+    ["Leo", new Date(1970, 6, 23)],
+    ["Virgo", new Date(1970, 7, 23)],
+    ["Libra", new Date(1970, 8, 23)],
+    ["Scorpio", new Date(1970, 9, 23)],
+    ["Sagittarius", new Date(1970, 10, 22)],
+    ["Capricorn", new Date(1970, 11, 22)]
+].reverse();
+
+function getZodiac(month, day) {
+    let d = new Date(1970, month - 1, day);
+    return zodiak.find(([_, _d]) => d >= _d)[0];
+}
+
+function checkZodiac() {
+    const year = document.getElementById("year").value;
+    const month = document.getElementById("month").value;
+    const day = document.getElementById("day").value;
+
+    if (!year || !month || !day) {
+        alert("Harap masukkan tahun, bulan, dan tanggal dengan benar.");
+        return;
+    }
+
+    const date = new Date(`${year}-${month}-${day}`);
+    if (isNaN(date)) {
+        alert("Tanggal tidak valid! Cek kembali formatnya.");
+        return;
+    }
+
+    const d = new Date();
+    const birth = [date.getFullYear(), date.getMonth() + 1, date.getDate()];
+    const zodiac = getZodiac(birth[1], birth[2]);
+
+    const age = d.getFullYear() - birth[0];
+
+    const birthday = new Date(d.getFullYear(), birth[1] - 1, birth[2]);
+    birthday.setFullYear(d.getFullYear() + (birthday < d));
+
+    const timeUntilNextBirthday = birthday - d;
+    const daysUntilNextBirthday = Math.floor(timeUntilNextBirthday / (1000 * 60 * 60 * 24));
+
+    const resultText = `
+        <p><strong>Lahir:</strong> ${birth.join('-')}</p>
+        <p><strong>Zodiak:</strong> ${zodiac}</p>
+        <p><strong>Usia:</strong> ${age} tahun</p>
+        <p><strong>Ulang Tahun Selanjutnya:</strong> ${daysUntilNextBirthday} hari lagi 🎂</p>
+    `;
+
+    document.getElementById("result").innerHTML = resultText;
+}
+    </script>
+</body>
+</html>
